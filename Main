@@ -1,0 +1,10 @@
+package advanced.java.hangman;
+
+public class Main {
+
+    public static void main(String[] args){
+    
+        ReverseHangMan reverseHangMan = new ReverseHangMan();
+        reverseHangMan.start();
+    }
+}
