@@ -1,0 +1,102 @@
+package advanced.java.hangman;
+
+import java.util.*;
+
+public class ReverseHangMan {
+    Scanner scanner = new Scanner(System.in);
+
+    public void start(){
+
+        System.out.println("Welcome to the HangMan game. This time, you can hang me - the computer.");
+        System.out.println("But what you need to do first, is think about the word ( In English).");
+        System.out.println("If you have it, please count it's letters.");
+        System.out.print("How many letters does your word have?");
+        int numberOfLetters = scanner.nextInt();
+        System.out.println();
+        scanner.nextLine();
+        String[] theWord = new String[numberOfLetters];
+        Arrays.fill(theWord, "_");
+        LinkedList<String> chars = new LinkedList<>(); // czy LinkedList to najlepszy pomysł tutaj? jak na tym zrobić random?
+        Collections.addAll(chars, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "q", "w", "r", "t", "y", "u", "o", "p", "s", "z", "x", "v");
+        startGuessing(chars, theWord, numberOfLetters);
+
+    }
+
+    private void startGuessing(LinkedList<String> x, String[] y, int z) {
+        Random random = new Random();
+        int numberOfGuesses = (z + (z/2));
+        while (numberOfGuesses>0) {
+        int charIndex = random.nextInt(x.size());
+        String choosenChar = x.get(charIndex);
+            System.out.println("Is the letter: " + choosenChar + "  in your word? yes/no");
+            String answer = scanner.nextLine();
+            if (answer.equalsIgnoreCase("yes")) {
+                System.out.println("On which position the letter stand in your word? Please write a number.");
+                int charPosition = scanner.nextInt();
+                if(y[charPosition - 1].equals("_")) {
+                    y[(charPosition - 1)] = choosenChar;
+                    showTheWord(y);
+                }else{
+                    System.err.println("You already have a letter on this position guessed.");
+                    showTheWord(y);
+                    System.out.println("Please count your letters and write o position again. If the previous counting was wrong, please escape the game and start again. :)");
+                    System.out.println("Correct position of \"" + choosenChar + "\" is");
+                    charPosition = scanner.nextInt();
+                    y[(charPosition - 1)] = choosenChar;
+                    showTheWord(y);
+                }
+
+                String answer2 = "yes";
+                checkIfWin(y);
+                while (answer2.equalsIgnoreCase("yes")) {
+                    System.out.println("Is there another " + choosenChar + " in your word? yes/no");
+                    scanner.nextLine();
+                    answer2 = scanner.nextLine();
+                    if (answer2.equalsIgnoreCase("yes")) {
+                        System.out.println("On which position the letter stand in your word? Please write a number.");
+                        int anotherCharPosition = scanner.nextInt();
+                        if(y[anotherCharPosition - 1].equals("_")) {
+                            y[(anotherCharPosition - 1)] = choosenChar;
+                            showTheWord(y);
+                        }else{
+                            System.err.println("You already have a letter on this position guessed.");
+                            showTheWord(y);
+                            System.out.println("Please count your letters and write o position again. If the previous counting was wrong, please escape the game and start again. :)");
+                            System.out.println("Correct position of \"" + choosenChar + "\" is");
+                            anotherCharPosition = scanner.nextInt();
+                            y[(anotherCharPosition - 1)] = choosenChar;
+                            showTheWord(y);
+                        }
+                    }
+                }
+
+            }
+            numberOfGuesses--;
+            checkIfWin(y);
+        }
+        System.out.println("Congratulation! You hanged me!");
+    }
+
+    private void checkIfWin(String[] y) {
+        int check = 0;
+        for(int i = 0; i<y.length; i++){
+            if((y[i].equals("_"))){
+                check++;
+            }
+        }
+        if(check == 0){
+            System.out.println("Congratulation! I won! XD");
+            System.exit(0);
+        }
+    }
+
+    private void showTheWord(String[] y) {
+        System.out.println("Your word looks like that: ");
+        for(int i = 0; i<y.length; i++){
+            System.out.print(y[(i)] + " ");
+        }
+        System.out.println();
+    }
+
+
+}
